@@ -16,8 +16,9 @@ const getters = {}
 //to handle actions
 const actions = {
     getPosts({ commit }) {
-        axios.get('https://jsonplaceholder.typicode.com/posts')
+        axios.get('https://b-block-api.herokuapp.com/api/v1')
             .then(response => {
+                console.log('api', response);
                 commit('SET_POSTS', response.data)
         })
     }
