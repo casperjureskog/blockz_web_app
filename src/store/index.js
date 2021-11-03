@@ -1,40 +1,43 @@
-import axios from 'axios'
-import Vuex from 'vuex'
 import Vue from 'vue'
+import Vuex from 'vuex'
+Vue.use(Vuex)
 
-//load Vuex
-Vue.use(Vuex);
+import axios from 'axios';
+import building from './building';
+// const LOGIN_URL = 'https://b-block-api.herokuapp.com/api/v1';
+const LOGIN_URL = 'http://localhost:3000/api/v1';
 
-//to handle state
-const state = {
-    posts: []
-}
 
-//to handle state
-const getters = {}
-
-//to handle actions
-const actions = {
-    getPosts({ commit }) {
-        axios.get('https://b-block-api.herokuapp.com/api/v1')
-            .then(response => {
-                console.log('api', response);
-                commit('SET_POSTS', response.data)
-        })
-    }
-}
-
-//to handle mutations
-const mutations = {
-    SET_POSTS(state, posts) {
-        state.posts = posts
-    }
-}
-
-//export store module
 export default new Vuex.Store({
-    state,
-    getters,
-    actions,
-    mutations
+    modules: {
+		building,
+    },
+  state: {
+    token:'',
+    mobiles:[],
+  },
+  mutations: {
+    setMobiles(state, mobiles) {
+      state.mobiles = mobiles;
+    },
+    setToken(state, t) {
+      state.token = t;
+    },
+  },
+  actions: {
+    async login(context, credentials) {
+      return axios.post(LOGIN_URL+'/auth/sign_in', {
+            email: credentials.username,
+          password: credentials.password
+      })
+      .then(res => {
+        console.log('re data', res);
+        context.commit('setToken', res.data.token);
+        return true;
+      })
+      .catch(error => {
+        console.error(error);
+      });  
+    }
+  }
 })
