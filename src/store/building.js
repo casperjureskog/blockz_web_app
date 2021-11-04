@@ -39,10 +39,11 @@ const actions = {
             }); 
         })
     },
-    getFacilities({ commit },data) {
+    getFacilities({ commit }) {
         return new Promise((resolve, reject) => {
-            axios.get(LOGIN_URL+'/facilities/'+data)
+            axios.get(LOGIN_URL+'/facilities')
             .then((response) => {
+                console.log('facilities', response);
                 commit('facilities', response.data)
                 resolve(response.data)
             })
@@ -50,7 +51,20 @@ const actions = {
                 reject(error)
             }); 
         })
-    }				
+    },
+    getFacilitity({ commit }, data) {
+        return new Promise((resolve, reject) => {
+            axios.get(LOGIN_URL + '/facilities/',data)
+                .then((response) => {
+                    console.log('facilities', response);
+                    commit('facilities', response.data)
+                    resolve(response.data)
+                })
+                .catch((error) => {
+                    reject(error)
+                });
+        })
+    }
 }
 
 const module = {
